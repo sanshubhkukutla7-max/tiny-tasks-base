@@ -25,6 +25,8 @@ export default function App() {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const remainingCount = tasks.filter((task) => !task.completed).length;
+
   const loadTasks = useCallback(async (isRefresh = false) => {
     isRefresh ? setRefreshing(true) : setLoading(true);
     setError(null);
@@ -148,6 +150,11 @@ export default function App() {
           </Text>
         ) : null}
 
+        {!loading && (
+          <Text accessibilityLiveRegion="polite" style={styles.remainingCount} testID="remaining-task-count">
+            {remainingCount} {remainingCount === 1 ? 'task' : 'tasks'} remaining
+          </Text>
+        )}
         {loading ? (
           <View style={styles.centerState}>
             <ActivityIndicator color="#2f6bff" size="large" />
@@ -264,6 +271,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     padding: 12,
   },
+  remainingCount: { color: '#607080', fontSize: 14, fontWeight: '600', marginTop: 18 },
   list: { gap: 10, paddingBottom: 24, paddingTop: 18 },
   emptyList: { flexGrow: 1 },
   task: {
